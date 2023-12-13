@@ -1,0 +1,39 @@
+package network
+
+import (
+	"log"
+	"net"
+	"os"
+
+	"github.com/mdp/qrterminal"
+)
+
+func PrintLanServerIpQr() {
+	myIp, _ := getLocalIp()
+	serverAddr := "http://" + myIp + ":" + GetServerPort()
+	qrterminal.Generate(serverAddr, qrterminal.L, os.Stdout)
+}
+
+func getLocalIp() (string, error) {
+	connection, err := net.Dial("udp", "8.8.8.8:80")
+
+	if err != nil {
+		return "", err
+	}
+
+	defer connection.Close()
+
+	localAddr := connection.LocalAddr().(*net.UDPAddr)
+
+	return localAddr.IP.String(), nil
+}
+
+func GetServerPort() string {
+	port := os.Getenv("PORT")
+
+	if (port == "") {
+		log.Fatal("PORT is not found in the environment")
+	}
+
+	return port
+}
