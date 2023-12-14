@@ -9,8 +9,8 @@
   <body>
     <h1>Select your files to transfer</h1>
     <form action="/api/v1/upload" method="post" enctype="multipart/form-data">
-      <label for="file">Choose a file:</label>
-      <input type="file" name="file" id="file" required />
+      <label for="files">Choose the files:</label>
+      <input type="file" name="files" id="files" required multiple />
       <br />
       <input type="submit" value="Upload" />
     </form>

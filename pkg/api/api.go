@@ -1,6 +1,9 @@
 package api
 
 import (
+	"fmt"
+
+	"github.com/buildtheui/DropMyFile/pkg/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
 )
@@ -21,13 +24,22 @@ func setUpApis() {
 	api := App.Group("/api/v1")
 
 	api.Post("/upload", func(c *fiber.Ctx) error {
-		file, err := c.FormFile("file")
+		form, err := c.MultipartForm()
 
 		if err != nil {
 			return err
 		}
 
-		c.SaveFile(file, "files/" + file.Filename)
+		files := form.File["files"]
+
+		for _, file := range files {
+
+			err := c.SaveFile(file, fmt.Sprintf("./files/%s", utils.RenameFileToUnique(file.Filename)))
+
+			if err != nil {
+				return err
+			}
+		}
 
 		return c.Render("index", fiber.Map{})
 	})
