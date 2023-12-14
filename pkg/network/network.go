@@ -6,12 +6,13 @@ import (
 	"net"
 	"os"
 
+	"github.com/buildtheui/DropMyFile/pkg/global"
 	"github.com/mdp/qrterminal"
 )
 
 func PrintLanServerIpQr() {
 	myIp, _ := getLocalIp()
-	serverAddr := "http://" + myIp + ":" + GetServerPort()
+	serverAddr := fmt.Sprintf("http://%s:%s/?s=%s", myIp, GetServerPort(), global.GSession) 
 	qrterminal.Generate(serverAddr, qrterminal.L, os.Stdout)
 	fmt.Println("Or go to: " + serverAddr)
 }

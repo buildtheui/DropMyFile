@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 
+	"github.com/buildtheui/DropMyFile/pkg/global"
 	"github.com/buildtheui/DropMyFile/pkg/utils"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
@@ -23,7 +24,8 @@ func setupRoutes() {
 func setUpApis() {
 	api := App.Group("/api/v1")
 
-	api.Post("/upload", func(c *fiber.Ctx) error {
+	api.Post("/upload", func(c *fiber.Ctx) error {		
+
 		form, err := c.MultipartForm()
 
 		if err != nil {
@@ -53,6 +55,9 @@ func RouterInit() *fiber.App {
 	App = fiber.New(fiber.Config{
 		Views: engine,
 	})
+
+	// Only LAN users can access with the correct session printed in console
+	App.Use(global.ValidateSession)
 
 	// Call setupRoutes to set up your routes
 	setupRoutes()
