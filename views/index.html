@@ -6,13 +6,49 @@
     <link rel="stylesheet" type="text/css" href="/assets/style.css" />
     <title>Drop my file</title>
   </head>
-  <body>
+  <body
+    x-data="{ files: [], progress: 0, session: '{{ .Session }}' }"
+    @dragover.prevent
+    @drop="handleDrop"
+  >
     <h1>Select your files to transfer</h1>
-    <form action="/api/v1/upload" method="post" enctype="multipart/form-data">
-      <label for="files">Choose the files:</label>
-      <input type="file" name="files" id="files" required multiple />
-      <br />
-      <input type="submit" value="Upload" />
-    </form>
+
+    <!-- Upload files area -->
+    <div class="drop-area">
+      <div class="drop-area__content">
+        Drag & Drop files here or
+        <input
+          x-ref="fileInput"
+          type="file"
+          multiple
+          @change="handleFileChange"
+          style="visibility: hidden; height: 1px"
+        />
+        <button class="button--outline" @click="$refs.fileInput.click()">
+          Select files
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <div x-show="files.length > 0">
+        <h2>Selected Files:</h2>
+        <ul>
+          <template x-for="(file, index) in files">
+            <li x-text="file.name + ' ' + formatBytes(file.size)"></li>
+          </template>
+        </ul>
+        <div
+          class="progress-bar"
+          x-bind:style="'width:' + progress + '%'"
+        ></div>
+        <button class="button" @click="uploadFiles">Upload Files</button>
+      </div>
+    </div>
+
+    <!-- List of files -->
+
+    <script src="/assets/alpine-3-x-x.min.js"></script>
+    <script src="/assets/upload.js"></script>
   </body>
 </html>

@@ -17,7 +17,7 @@ func setupRoutes() {
 
 	
 	App.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("index", fiber.Map{})
+		return c.Render("index", fiber.Map{ "Session": global.GSession })
 	})
 }
 

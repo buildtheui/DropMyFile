@@ -1,13 +1,21 @@
 /* style.css */
-body {
+:root {
   font-size: "62.5%";
+  --color-background-primary: #5a58f2;
+  --color-background-primary-highlighted: #4d4af0;
+  --color-border-primary: #3b38ed;
+  --color-border-primary-highlighted: #8d8bef;
+}
+
+body {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   background-color: #f4f4f4;
-  margin: 0;
+  margin: auto;
   padding: 0;
+  box-sizing: border-box;
+  max-width: 90rem;
 }
 
 h1 {
@@ -16,9 +24,66 @@ h1 {
 }
 
 form {
-  margin-top: 20px;
-  padding: 20px;
+  margin-top: 2rem;
+  padding: 2rem;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 0.8rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+}
+
+.button {
+  font-size: 1rem;
+  padding: 0.6rem 1.3rem;
+  background-color: var(--color-background-primary);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button--outline {
+  font-size: 1rem;
+  padding: 0.6rem 1.3rem;
+  color: var(--color-border-primary);
+  background-color: transparent;
+  border: 0.15rem solid var(--color-border-primary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: var(--color-background-primary-highlighted);
+}
+
+.button--outline:hover {
+  color: var(--color-border-primary-highlighted);
+  border-color: var(--color-border-primary-highlighted);
+}
+
+.drop-area {
+  height: 10rem;
+  border: 0.2rem dashed #ccc;
+  border-radius: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0 1rem;
+  color: #5a5656;
+}
+
+.drop-area__content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.progress-bar {
+  width: 0;
+  height: 0.2rem;
+  background-color: #4caf50;
+  margin-top: 1rem;
 }
