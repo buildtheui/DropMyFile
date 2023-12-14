@@ -24,7 +24,7 @@ func ValidateSession(c *fiber.Ctx) error {
 	}
 
 	if !IsvalidSession(c.Query("s")) {
-		return c.Status(401).SendString("Access denied")
+		return c.Status(fiber.StatusUnauthorized).SendString("Access denied")
 	}
 
 	return c.Next();

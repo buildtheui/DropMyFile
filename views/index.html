@@ -6,36 +6,40 @@
     <link rel="stylesheet" type="text/css" href="/assets/style.css" />
     <title>Drop my file</title>
   </head>
-  <body
-    x-data="{ files: [], progress: 0, session: '{{ .Session }}' }"
-    @dragover.prevent
-    @drop="handleDrop"
-  >
-    <h1>Select your files to transfer</h1>
-
+  <body @dragover.prevent @drop="handleDrop">
     <!-- Upload files area -->
-    <div class="drop-area">
-      <div class="drop-area__content">
-        Drag & Drop files here or
-        <input
-          x-ref="fileInput"
-          type="file"
-          multiple
-          @change="handleFileChange"
-          style="visibility: hidden; height: 1px"
-        />
-        <button class="button--outline" @click="$refs.fileInput.click()">
-          Select files
-        </button>
+    <div
+      x-data="uploadData"
+      x-init="session = '{{ .Session }}'"
+      class="upload-container"
+    >
+      <h1>Select your files to transfer</h1>
+      <div class="drop-area">
+        <div class="drop-area__content">
+          Drag & Drop files here or
+          <input
+            x-ref="fileInput"
+            type="file"
+            multiple
+            @change="handleFileChange"
+            style="visibility: hidden; height: 1px"
+          />
+          <button class="button--outline" @click="$refs.fileInput.click()">
+            Select files
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div>
       <div x-show="files.length > 0">
         <h2>Selected Files:</h2>
-        <ul>
+        <ul class="selected-file__list">
           <template x-for="(file, index) in files">
-            <li x-text="file.name + ' ' + formatBytes(file.size)"></li>
+            <li class="selected-file__item">
+              <span x-text="file.name + ' ' + formatBytes(file.size)"></span>
+              <button class="remove-button" @click="files.splice(index, 1)">
+                x
+              </button>
+            </li>
           </template>
         </ul>
         <div
@@ -47,8 +51,7 @@
     </div>
 
     <!-- List of files -->
-
-    <script src="/assets/alpine-3-x-x.min.js"></script>
-    <script src="/assets/upload.js"></script>
+    <script src="/assets/upload.js" type="text/javascript"></script>
+    <script src="/assets/alpine-3-x-x.min.js" type="text/javascript"></script>
   </body>
 </html>

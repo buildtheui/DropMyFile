@@ -5,6 +5,10 @@
   --color-background-primary-highlighted: #4d4af0;
   --color-border-primary: #3b38ed;
   --color-border-primary-highlighted: #8d8bef;
+  --color-background-critical: #e22c2c;
+  --color-background-critical-highlighted: #d02828;
+  --color-on-background-critical: #fff;
+  --white: #fff;
 }
 
 body {
@@ -62,6 +66,10 @@ form {
   border-color: var(--color-border-primary-highlighted);
 }
 
+.upload-container {
+  margin: 0 1rem;
+}
+
 .drop-area {
   height: 10rem;
   border: 0.2rem dashed #ccc;
@@ -70,7 +78,6 @@ form {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  margin: 0 1rem;
   color: #5a5656;
 }
 
@@ -86,4 +93,31 @@ form {
   height: 0.2rem;
   background-color: #4caf50;
   margin-top: 1rem;
+}
+
+.selected-file__list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.selected-file__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 8px;
+}
+
+.remove-button {
+  background-color: var(--color-background-critical);
+  color: var(--color-on-background-critical);
+  border: none;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1;
 }

@@ -25,9 +25,7 @@ func setUpApis() {
 	api := App.Group("/api/v1")
 
 	api.Post("/upload", func(c *fiber.Ctx) error {		
-
 		form, err := c.MultipartForm()
-
 		if err != nil {
 			return err
 		}
@@ -35,7 +33,6 @@ func setUpApis() {
 		files := form.File["files"]
 
 		for _, file := range files {
-
 			err := c.SaveFile(file, fmt.Sprintf("./files/%s", utils.RenameFileToUnique(file.Filename)))
 
 			if err != nil {
@@ -43,7 +40,7 @@ func setUpApis() {
 			}
 		}
 
-		return c.Render("index", fiber.Map{})
+		return c.Status(fiber.StatusAccepted).JSON(fiber.Map{})
 	})
 }
 
