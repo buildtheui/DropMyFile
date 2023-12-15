@@ -1,5 +1,43 @@
 "use strict";
 
+function initWebSocket(session) {
+  const socket = new WebSocket(
+    "ws://" + window.location.host + "/ws/files?s=" + session
+  );
+
+  // Connection opened
+  socket.addEventListener("open", (event) => {
+    console.log("WebSocket connection opened:", event);
+  });
+
+  // Listen for messages
+  socket.addEventListener("message", (event) => {
+    const data = JSON.parse(event.data);
+    console.log("WebSocket message received:", data);
+
+    // Handle the received data as needed
+    // Example: Update the UI with the received data
+    updateUI(data);
+  });
+
+  // Connection closed
+  socket.addEventListener("close", (event) => {
+    console.log("WebSocket connection closed:", event);
+  });
+
+  // Connection error
+  socket.addEventListener("error", (event) => {
+    console.error("WebSocket connection error:", event);
+  });
+
+  // Example function to update the UI with received data
+  function updateUI(data) {
+    // Implement your UI update logic here
+    // Example: Display the received data in the console
+    console.log("UI updated with data:", data);
+  }
+}
+
 document.addEventListener("alpine:init", () => {
   Alpine.data("global", () => ({
     isLoading: false,
@@ -7,6 +45,10 @@ document.addEventListener("alpine:init", () => {
     files: [],
     progress: 0,
     session: "",
+    initData(session) {
+      initWebSocket(session);
+      return session;
+    },
     toggleToast(isOpen, data) {
       this.toastContent = {
         isOpen,

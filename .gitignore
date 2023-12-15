@@ -21,4 +21,8 @@ DropMyFile
 # Go workspace file
 go.work
 
+# File folder
 files
+
+# system
+.DS_store

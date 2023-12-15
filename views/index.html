@@ -8,7 +8,7 @@
   </head>
   <body
     x-data="global"
-    x-init="session = '{{ .Session }}'"
+    x-init="session = initData('{{ .Session }}')"
     @dragover.prevent
     @drop="handleDrop"
   >
