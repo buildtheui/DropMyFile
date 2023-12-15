@@ -1,14 +1,27 @@
 /* style.css */
 :root {
-  font-size: "62.5%";
+  font-size: 62.5%;
   --color-background-primary: #5a58f2;
   --color-background-primary-highlighted: #4d4af0;
   --color-border-primary: #3b38ed;
   --color-border-primary-highlighted: #8d8bef;
   --color-background-critical: #e22c2c;
   --color-background-critical-highlighted: #d02828;
-  --color-on-background-critical: #fff;
+  --color-background-positive: #118850;
+  --color-background-positive-faded: #f1fdf8;
+  --color-background-positive-highlighted: #0f7d49;
+  --color-foreground-neutral: #14181f;
+  --color-foreground-neutral-faded: #5b667e;
+  --color-border-neutral: #b3bbce;
+  --color-border-neutral-faded: #e2e3e4;
+  --color-on-background-critical: var(--white);
   --white: #fff;
+  --black: #000000;
+
+  --shadow-raised: 0px 2px 3px 0px rgba(0, 0, 0, 0.1),
+    0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-overlay: 0px 5px 10px 0px rgba(0, 0, 0, 0.05),
+    0px 15px 25px 0px rgba(0, 0, 0, 0.07);
 }
 
 body {
@@ -19,27 +32,29 @@ body {
   margin: auto;
   padding: 0;
   box-sizing: border-box;
-  max-width: 90rem;
+  max-width: 100rem;
+  color: var(--color-foreground-neutral);
 }
 
+/* HTML elements */
+
 h1 {
-  color: #333;
-  font-family: 1.6rem;
+  font-size: 2.6rem;
 }
 
 form {
   margin-top: 2rem;
   padding: 2rem;
-  background-color: #fff;
+  background-color: var(--white);
   border-radius: 0.8rem;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
 }
 
 .button {
-  font-size: 1rem;
+  font-size: 1.8rem;
   padding: 0.6rem 1.3rem;
   background-color: var(--color-background-primary);
-  color: #fff;
+  color: var(--white);
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -47,11 +62,11 @@ form {
 }
 
 .button--outline {
-  font-size: 1rem;
+  font-size: 1.8rem;
   padding: 0.6rem 1.3rem;
   color: var(--color-border-primary);
   background-color: transparent;
-  border: 0.15rem solid var(--color-border-primary);
+  border: 0.2rem solid var(--color-border-primary);
   border-radius: 0.5rem;
   cursor: pointer;
   transition: color 0.3s ease, border-color 0.3s ease;
@@ -66,19 +81,60 @@ form {
   border-color: var(--color-border-primary-highlighted);
 }
 
+/* Components */
+
+.toast {
+  z-index: 50;
+  position: fixed;
+  bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(2rem);
+  width: 30rem;
+  background-color: var(--white);
+  border: 0.1rem solid #ccc;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-overlay);
+  display: flex;
+  flex-direction: column;
+  font-size: 1.6rem;
+}
+
+.toast__header {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  box-shadow: inset 0 0.6rem 0 0 var(--color-background-positive);
+}
+
+.toast__header-button {
+  background-color: transparent;
+  color: var(--color-foreground-neutral-faded);
+  border: none;
+  cursor: pointer;
+  font-size: 1.9rem;
+  outline: none;
+  padding: 1rem 0.8rem 0 0.5rem;
+}
+
+.toast__body {
+  padding: 1rem;
+}
+
+/* Sections */
+
 .upload-container {
   margin: 0 1rem;
 }
 
 .drop-area {
-  height: 10rem;
-  border: 0.2rem dashed #ccc;
+  height: 12rem;
+  border: 0.2rem dashed var(--color-border-neutral);
   border-radius: 0.4rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #5a5656;
+  color: var(--color-foreground-neutral-faded);
 }
 
 .drop-area__content {
@@ -86,28 +142,30 @@ form {
   align-items: center;
   flex-direction: column;
   gap: 0.5rem;
+  font-size: 1.5rem;
 }
 
 .progress-bar {
   width: 0;
   height: 0.2rem;
-  background-color: #4caf50;
+  background-color: var(--color-background-positive);
   margin-top: 1rem;
 }
 
 .selected-file__list {
   list-style-type: none;
   padding: 0;
+  font-size: 1.4rem;
 }
 
 .selected-file__item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-bottom: 5px;
-  padding: 8px;
+  border: 0.1rem solid #ccc;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.8rem;
 }
 
 .remove-button {
@@ -115,9 +173,9 @@ form {
   color: var(--color-on-background-critical);
   border: none;
   border-radius: 50%;
-  padding: 5px;
+  padding: 0.5rem;
   cursor: pointer;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
   line-height: 1;
 }

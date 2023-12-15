@@ -6,13 +6,24 @@
     <link rel="stylesheet" type="text/css" href="/assets/style.css" />
     <title>Drop my file</title>
   </head>
-  <body @dragover.prevent @drop="handleDrop">
+  <body
+    x-data="global"
+    x-init="session = '{{ .Session }}'"
+    @dragover.prevent
+    @drop="handleDrop"
+  >
+    <!-- Toast container -->
+    <div x-show="toastContent.isOpen" class="toast">
+      <div class="toast__header" x-transition>
+        <button class="toast__header-button" @click="toggleToast(false)">
+          x
+        </button>
+      </div>
+      <div class="toast__body" x-text="toastContent.content" x-transition></div>
+    </div>
+
     <!-- Upload files area -->
-    <div
-      x-data="uploadData"
-      x-init="session = '{{ .Session }}'"
-      class="upload-container"
-    >
+    <div class="upload-container">
       <h1>Select your files to transfer</h1>
       <div class="drop-area">
         <div class="drop-area__content">

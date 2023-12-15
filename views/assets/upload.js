@@ -1,10 +1,17 @@
 "use strict";
 
 document.addEventListener("alpine:init", () => {
-  Alpine.data("uploadData", () => ({
+  Alpine.data("global", () => ({
+    toastContent: { isOpen: false },
     files: [],
     progress: 0,
     session: "",
+    toggleToast(isOpen, data) {
+      this.toastContent = {
+        isOpen,
+        ...data,
+      };
+    },
     handleFileChange(event) {
       this.files = Array.from(event.target.files);
     },
@@ -42,9 +49,15 @@ document.addEventListener("alpine:init", () => {
           return response.json();
         })
         .then(() => {
+          this.toggleToast(true, {
+            type: "success",
+            content: `${this.files.length} were transfered succesfully!`,
+          });
           this.files = [];
           this.progress = 0;
-          // Handle the server response as needed
+          setTimeout(() => {
+            this.toggleToast(false);
+          }, 6000);
         })
         .catch((error) => {
           console.error("Error uploading files:", error);
