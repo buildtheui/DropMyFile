@@ -2,6 +2,7 @@
 
 document.addEventListener("alpine:init", () => {
   Alpine.data("global", () => ({
+    isLoading: false,
     toastContent: { isOpen: false },
     files: [],
     progress: 0,
@@ -13,11 +14,11 @@ document.addEventListener("alpine:init", () => {
       };
     },
     handleFileChange(event) {
-      this.files = Array.from(event.target.files);
+      this.files = this.files.concat(Array.from(event.target.files));
     },
     handleDrop(event) {
       event.preventDefault();
-      this.files = Array.from(event.dataTransfer.files);
+      this.files = this.files.concat(Array.from(event.dataTransfer.files));
     },
     formatBytes(bytes, decimals = 2) {
       if (bytes === 0) return "0 Bytes";
@@ -28,6 +29,10 @@ document.addEventListener("alpine:init", () => {
       return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
     },
     uploadFiles() {
+      if (this.isLoading) return;
+
+      this.isLoading = true;
+
       const formData = new FormData();
       this.files.forEach((file) => formData.append("files", file));
 
@@ -51,7 +56,7 @@ document.addEventListener("alpine:init", () => {
         .then(() => {
           this.toggleToast(true, {
             type: "success",
-            content: `${this.files.length} were transfered succesfully!`,
+            content: `${this.files.length} files were transfered succesfully!`,
           });
           this.files = [];
           this.progress = 0;
@@ -61,6 +66,9 @@ document.addEventListener("alpine:init", () => {
         })
         .catch((error) => {
           console.error("Error uploading files:", error);
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
   }));

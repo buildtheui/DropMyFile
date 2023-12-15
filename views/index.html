@@ -57,7 +57,9 @@
           class="progress-bar"
           x-bind:style="'width:' + progress + '%'"
         ></div>
-        <button class="button" @click="uploadFiles">Upload Files</button>
+        <button class="button" @click="uploadFiles">
+          <span x-show="isLoading" class="spinner"></span> Upload Files
+        </button>
       </div>
     </div>
 

@@ -18,10 +18,10 @@
   --white: #fff;
   --black: #000000;
 
-  --shadow-raised: 0px 2px 3px 0px rgba(0, 0, 0, 0.1),
-    0px 1px 2px -1px rgba(0, 0, 0, 0.1);
-  --shadow-overlay: 0px 5px 10px 0px rgba(0, 0, 0, 0.05),
-    0px 15px 25px 0px rgba(0, 0, 0, 0.07);
+  --shadow-raised: 0 0.2rem 0.3rem 0 rgba(0, 0, 0, 0.1),
+    0 0.1rem 0.2rem -0.1rem rgba(0, 0, 0, 0.1);
+  --shadow-overlay: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.05),
+    0 1.5rem 2.5rem 0 rgba(0, 0, 0, 0.07);
 }
 
 body {
@@ -51,6 +51,8 @@ form {
 }
 
 .button {
+  display: flex;
+  gap: 0.7rem;
   font-size: 1.8rem;
   padding: 0.6rem 1.3rem;
   background-color: var(--color-background-primary);
@@ -62,6 +64,8 @@ form {
 }
 
 .button--outline {
+  display: flex;
+  gap: 0.7rem;
   font-size: 1.8rem;
   padding: 0.6rem 1.3rem;
   color: var(--color-border-primary);
@@ -178,4 +182,26 @@ form {
   width: 2.5rem;
   height: 2.5rem;
   line-height: 1;
+}
+
+/* Utils */
+
+.spinner {
+  transform: translateY(-50%);
+  border: 0.3rem solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  border-top: 0.3rem solid white;
+  width: 1.5rem;
+  height: 1.5rem;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
