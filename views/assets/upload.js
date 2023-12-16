@@ -2,7 +2,7 @@
 
 function initWebSocket(session) {
   const socket = new WebSocket(
-    "ws://" + window.location.host + "/ws/files?s=" + session
+    `ws://${window.location.host}/ws/files?s=${session}`
   );
 
   // Connection opened

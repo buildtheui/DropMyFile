@@ -8,6 +8,7 @@ import (
 
 	folderwatch "github.com/buildtheui/DropMyFile/pkg/folder_watch"
 	"github.com/buildtheui/DropMyFile/pkg/global"
+	"github.com/buildtheui/DropMyFile/pkg/models"
 	"github.com/buildtheui/DropMyFile/pkg/utils"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
@@ -74,10 +75,14 @@ func broadcastFileChanges() {
 		case <-broadcast:
 			files, _ := folderwatch.GetTransferFilesInfo()
 
-			
-			jsonData, err := json.Marshal(files)
+			response := models.WSResponse {
+				Event_name: models.Files_modified,
+				Payload: files,
+			}
+
+			jsonData, err := json.Marshal(response)
 			if err != nil {
-				log.Println("Error listing files:", err)
+				log.Println("Error converting response for ws/files:", err)
 				continue
 			}
 
