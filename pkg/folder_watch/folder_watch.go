@@ -7,6 +7,7 @@ import (
 
 	"github.com/buildtheui/DropMyFile/pkg/models"
 	"github.com/buildtheui/DropMyFile/pkg/network"
+	"github.com/buildtheui/DropMyFile/pkg/utils"
 	"github.com/fsnotify/fsnotify"
 )
 
@@ -69,14 +70,22 @@ func GetTransferFilesInfo() ([]models.FileInfo, error) {
 		if !file.IsDir() {
 			downloadLink := network.GetServerAddr(fmt.Sprintf("/api/v1/download/%s", file.Name()))
 
+			fileInfo, err := file.Info()
+			if err != nil {
+				fmt.Println("Error getting file info:", err)
+				continue
+			}
+
 			// Create a FileInfo struct for the current file
-			fileInfo := models.FileInfo{
-				FileName:    file.Name(),
-				DownloadLink: downloadLink,
+			fileData := models.FileInfo{
+				File_name:    file.Name(),
+				Size: utils.FormatSize(fileInfo.Size()),
+				Mod_at: utils.FormatHumanDate(fileInfo.ModTime()),
+				Download_link: downloadLink,
 			}
 
 			// Append FileInfo to the slice
-			fileInfos = append(fileInfos, fileInfo)
+			fileInfos = append(fileInfos, fileData)
 		}
 	}
 

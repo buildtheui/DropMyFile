@@ -6,7 +6,8 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("global", () => ({
     isLoading: false,
     toastContent: { isOpen: false },
-    files: [],
+    filesToUpload: [],
+    filesList: [],
     progress: 0,
     session: "",
     initData(session) {
@@ -17,9 +18,13 @@ document.addEventListener("alpine:init", () => {
 
       WSObserver.subscribe({
         next: (event, data) => {
-          console.log(event, data);
+          if (event === "files_modified") {
+            this.filesList = data ?? [];
+          }
         },
+        // TODO: handle this error case
         error: (err) => console.log(err),
+        // TODO: handle this complete case
         complete: (err) => console.log(err),
       });
 
@@ -32,11 +37,15 @@ document.addEventListener("alpine:init", () => {
       };
     },
     handleFileChange(event) {
-      this.files = this.files.concat(Array.from(event.target.files));
+      this.filesToUpload = this.filesToUpload.concat(
+        Array.from(event.target.files)
+      );
     },
     handleDrop(event) {
       event.preventDefault();
-      this.files = this.files.concat(Array.from(event.dataTransfer.files));
+      this.filesToUpload = this.filesToUpload.concat(
+        Array.from(event.dataTransfer.files)
+      );
     },
     formatBytes(bytes, decimals = 2) {
       if (bytes === 0) return "0 Bytes";
@@ -52,7 +61,7 @@ document.addEventListener("alpine:init", () => {
       this.isLoading = true;
 
       const formData = new FormData();
-      this.files.forEach((file) => formData.append("files", file));
+      this.filesToUpload.forEach((file) => formData.append("files", file));
 
       const path = "/api/v1/upload" + "?s=" + this.session;
 
@@ -74,9 +83,9 @@ document.addEventListener("alpine:init", () => {
         .then(() => {
           this.toggleToast(true, {
             type: "success",
-            content: `${this.files.length} files were transfered succesfully!`,
+            content: `${this.filesToUpload.length} files were transfered succesfully!`,
           });
-          this.files = [];
+          this.filesToUpload = [];
           this.progress = 0;
           setTimeout(() => {
             this.toggleToast(false);

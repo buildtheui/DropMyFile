@@ -192,6 +192,40 @@ form {
   line-height: 1;
 }
 
+.file-list {
+  list-style-type: none;
+  padding: 0;
+  border-top: 0.1rem solid var(--color-border-neutral);
+  margin: 6rem 1rem 1rem;
+  font-size: 1.6rem;
+}
+
+.file-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 0.1rem solid var(--color-border-neutral);
+  padding: 1rem;
+}
+
+.file-list__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+}
+
+.file-list__info-data {
+  color: var(--color-foreground-neutral-faded);
+  font-size: 1.4rem;
+}
+
+.file-list__download {
+  stroke: var(--color-background-primary);
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
 /* Utils */
 
 .spinner {

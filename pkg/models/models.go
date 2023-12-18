@@ -7,8 +7,10 @@ const (
 
 // FileInfo represents information about a file, including its name and download link.
 type FileInfo struct {
-	FileName     string `json:"fileName"`
-	DownloadLink string `json:"downloadLink"`
+	File_name     string `json:"fileName"`
+	Size	      string `json:"size"`
+	Mod_at        string `json:"modTime"`
+	Download_link string `json:"downloadLink"`
 }
 
 type WSResponse struct {
