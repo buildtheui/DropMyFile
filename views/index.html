@@ -85,8 +85,17 @@
 
     <!-- List of files -->
 
-    <ul class="file-list" x-show="filesList.length > 0">
-      <template x-for="(file, index) in filesList">
+    <h2 class="file-list__title">Transfered files</h2>
+
+    <input
+      class="input search-input"
+      x-show="filesList.length > 0"
+      x-model="search"
+      placeholder="Filter files..."
+    />
+
+    <ul class="file-list" x-show="filteredFiles.length > 0">
+      <template x-for="(file, index) in filteredFiles" :key="file.fileName">
         <li class="file-list__item">
           <div class="file-list__info">
             <span x-text="file.fileName"></span>

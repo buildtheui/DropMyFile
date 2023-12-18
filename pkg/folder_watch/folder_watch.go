@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 
 	"github.com/buildtheui/DropMyFile/pkg/models"
 	"github.com/buildtheui/DropMyFile/pkg/network"
@@ -76,11 +77,14 @@ func GetTransferFilesInfo() ([]models.FileInfo, error) {
 				continue
 			}
 
+			mod_at := fileInfo.ModTime()
+
 			// Create a FileInfo struct for the current file
 			fileData := models.FileInfo{
 				File_name:    file.Name(),
 				Size: utils.FormatSize(fileInfo.Size()),
-				Mod_at: utils.FormatHumanDate(fileInfo.ModTime()),
+				Mod_at: utils.FormatHumanDate(mod_at),
+				Mod_at_to_sort: mod_at,
 				Download_link: downloadLink,
 			}
 
@@ -88,6 +92,10 @@ func GetTransferFilesInfo() ([]models.FileInfo, error) {
 			fileInfos = append(fileInfos, fileData)
 		}
 	}
+
+	sort.Slice(fileInfos, func(i, j int) bool {
+		return fileInfos[i].Mod_at_to_sort.After(fileInfos[j].Mod_at_to_sort)
+	})
 
 	return fileInfos, nil
 }

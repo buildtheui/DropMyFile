@@ -85,6 +85,23 @@ form {
   border-color: var(--color-border-primary-highlighted);
 }
 
+.input {
+  background: none;
+  border: 0.2rem solid var(--color-border-neutral);
+  border-radius: 0.5rem;
+  color: var(--color-foreground-neutral);
+  flex-grow: 1;
+  outline: none;
+  padding: 0.8rem 0.8rem;
+  position: relative;
+  width: 100%;
+  font-size: var(1.4rem);
+}
+
+.input:focus {
+  border-color: var(--color-border-primary);
+}
+
 /* Components */
 
 .toast {
@@ -130,6 +147,11 @@ form {
 
 .toast__body-icon--success {
   stroke: var(--color-background-positive);
+}
+
+.search-input {
+  max-width: 30rem;
+  margin: 1rem 1rem;
 }
 
 /* Sections */
@@ -196,7 +218,7 @@ form {
   list-style-type: none;
   padding: 0;
   border-top: 0.1rem solid var(--color-border-neutral);
-  margin: 6rem 1rem 1rem;
+  margin: 1rem;
   font-size: 1.6rem;
 }
 
@@ -237,6 +259,10 @@ form {
   height: 1.5rem;
   animation: spin 1s linear infinite;
   display: inline-block;
+}
+
+.file-list__title {
+  margin: 5rem 1rem 0;
 }
 
 @keyframes spin {

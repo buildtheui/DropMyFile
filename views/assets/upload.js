@@ -4,6 +4,7 @@ let WSObserver;
 
 document.addEventListener("alpine:init", () => {
   Alpine.data("global", () => ({
+    search: "",
     isLoading: false,
     toastContent: { isOpen: false },
     filesToUpload: [],
@@ -19,6 +20,7 @@ document.addEventListener("alpine:init", () => {
       WSObserver.subscribe({
         next: (event, data) => {
           if (event === "files_modified") {
+            console.log(data);
             this.filesList = data ?? [];
           }
         },
@@ -29,6 +31,11 @@ document.addEventListener("alpine:init", () => {
       });
 
       return session;
+    },
+    get filteredFiles() {
+      return this.filesList.filter((file) =>
+        file.fileName.toLowerCase().includes(this.search.toLowerCase())
+      );
     },
     toggleToast(isOpen, data) {
       this.toastContent = {
