@@ -71,16 +71,17 @@ func broadcastFileChanges() {
 		select {
 		case connection := <- registerConn:
 			clients[connection] = client{}
+
+			jsonData, err := getListFilesResponse()			
+			if err != nil {
+				log.Println("Error converting response for ws/files:", err)
+				continue
+			}
+			// Send files to client right after the connection
+			sendMessageToClient(connection, jsonData)			
 		
 		case <-broadcast:
-			files, _ := folderwatch.GetTransferFilesInfo()
-
-			response := models.WSResponse {
-				Event_name: models.Files_modified,
-				Payload: files,
-			}
-
-			jsonData, err := json.Marshal(response)
+			jsonData, err := getListFilesResponse()			
 			if err != nil {
 				log.Println("Error converting response for ws/files:", err)
 				continue
@@ -88,18 +89,33 @@ func broadcastFileChanges() {
 
 			// Send the file change information to all clients
 			for connection := range clients {
-				if err := connection.WriteMessage(websocket.TextMessage, jsonData); err != nil {
-					log.Println("Send files to clients error:", err)
-
-					unRegisterConn <- connection
-					connection.WriteMessage(websocket.CloseMessage, []byte{})
-					connection.Close()
-				}
+				sendMessageToClient(connection, jsonData)
 			}
 
 		case connection := <- unRegisterConn:
 			delete(clients, connection)
 		}
+	}
+}
+
+func getListFilesResponse() ([]byte, error) {
+	files, _ := folderwatch.GetTransferFilesInfo()
+
+	response := models.WSResponse {
+		Event_name: models.Files_modified,
+		Payload: files,
+	}
+
+	 return json.Marshal(response)
+}
+
+func sendMessageToClient(connection *websocket.Conn, data []byte) {
+	if err := connection.WriteMessage(websocket.TextMessage, data); err != nil {
+		log.Println("Send files to clients error:", err)
+
+		unRegisterConn <- connection
+		connection.WriteMessage(websocket.CloseMessage, []byte{})
+		connection.Close()
 	}
 }
 
