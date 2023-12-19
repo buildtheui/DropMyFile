@@ -72,3 +72,13 @@ func FormatSize(size int64) string {
 		return fmt.Sprintf("%.1fTB", float64(size)/TB)
 	}
 }
+
+// containsString function checks if a string is present in a slice
+func ContainsString(slice []string, str string) bool {
+    for _, element := range slice {
+        if element == str {
+            return true
+        }
+    }
+    return false
+}

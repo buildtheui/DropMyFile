@@ -98,5 +98,13 @@ func GetTransferFilesInfo() ([]models.FileInfo, error) {
 		return fileInfos[i].Mod_at_to_sort.After(fileInfos[j].Mod_at_to_sort)
 	})
 
-	return fileInfos, nil
+	var filteredFiles []models.FileInfo
+
+	for _, file := range fileInfos {
+		if !utils.ContainsString(global.ExcludedFiles, file.File_name) {
+			filteredFiles = append(filteredFiles, file)
+		}
+	}
+
+	return filteredFiles, nil
 }

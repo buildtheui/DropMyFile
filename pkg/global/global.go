@@ -14,6 +14,7 @@ import (
 var GSession = utils.GenerateRandomString(6)
 var AllowPaths = []string{"/assets/"}
 var TransferFolder = getTransferFolder()
+var ExcludedFiles = []string{".DS_Store", "Thumbs.db", "desktop.ini"}
 
 func IsvalidSession(session string) bool {
 	return GSession == session
