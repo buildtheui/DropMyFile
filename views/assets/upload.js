@@ -1,5 +1,6 @@
 "use strict";
 
+const TOAST_TIMEOUT = 6000;
 let WSObserver;
 
 document.addEventListener("alpine:init", () => {
@@ -12,6 +13,16 @@ document.addEventListener("alpine:init", () => {
     progress: 0,
     session: "",
     initData(session) {
+      this.listenFileChanges(session);
+      return session;
+    },
+
+    get filteredFiles() {
+      return this.filesList.filter((file) =>
+        file.fileName.toLowerCase().includes(this.search.toLowerCase())
+      );
+    },
+    listenFileChanges(session) {
       const filesWSLink = `ws://${window.location.host}/ws/files?s=${session}`;
       WSObserver = new window.WSObservable({
         wsLink: filesWSLink,
@@ -25,23 +36,37 @@ document.addEventListener("alpine:init", () => {
           }
         },
         // TODO: handle this error case
-        error: (err) => console.log(err),
+        error: (err) => {
+          this.toggleToast(true, {
+            type: "error",
+            content: "Error listening changes from files",
+          });
+        },
         // TODO: handle this complete case
-        complete: (err) => console.log(err),
+        complete: (err) => {
+          this.toggleToast(
+            true,
+            {
+              type: "error",
+              content:
+                "Connection close: To see changes try restarting DropMyFile",
+            },
+            false
+          );
+        },
       });
-
-      return session;
     },
-    get filteredFiles() {
-      return this.filesList.filter((file) =>
-        file.fileName.toLowerCase().includes(this.search.toLowerCase())
-      );
-    },
-    toggleToast(isOpen, data) {
+    toggleToast(isOpen, data, closeWithTimeout = true) {
       this.toastContent = {
         isOpen,
         ...data,
       };
+
+      closeWithTimeout &&
+        this.toastContent.isOpen &&
+        setTimeout(() => {
+          this.toastContent = { isOpen: false };
+        }, TOAST_TIMEOUT);
     },
     handleFileChange(event) {
       this.filesToUpload = this.filesToUpload.concat(
@@ -94,12 +119,12 @@ document.addEventListener("alpine:init", () => {
           });
           this.filesToUpload = [];
           this.progress = 0;
-          setTimeout(() => {
-            this.toggleToast(false);
-          }, 6000);
         })
         .catch((error) => {
-          console.error("Error uploading files:", error);
+          this.toggleToast(true, {
+            type: "error",
+            content: "Error uploading: try restarting DropMyFile",
+          });
         })
         .finally(() => {
           this.isLoading = false;

@@ -127,6 +127,10 @@ form {
   box-shadow: inset 0 0.6rem 0 0 var(--color-background-positive);
 }
 
+.toast__header--error {
+  box-shadow: inset 0 0.6rem 0 0 var(--color-background-critical);
+}
+
 .toast__header-button {
   position: absolute;
   right: 0.3rem;
@@ -141,6 +145,7 @@ form {
 
 .toast__body {
   padding: 1rem;
+  padding-right: 2rem;
   display: flex;
   gap: 1.5rem;
 }

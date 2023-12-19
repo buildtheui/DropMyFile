@@ -163,6 +163,7 @@ func RouterInit() *fiber.App {
 	})
 
 	// Only LAN users can access with the correct session printed in console
+	// TODO turn this back on
 	// App.Use(global.ValidateSession)
 
 	// Call setupRoutes to set up your routes

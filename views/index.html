@@ -14,13 +14,17 @@
   >
     <!-- Toast container -->
     <div x-show="toastContent.isOpen" class="toast">
-      <div class="toast__header" x-transition>
+      <div
+        :class="{'toast__header': true, 'toast__header--error': toastContent.type === 'error'}"
+        x-transition
+      >
         <button class="toast__header-button" @click="toggleToast(false)">
           x
         </button>
       </div>
       <div class="toast__body" x-transition>
         <svg
+          x-show="toastContent.type === 'success'"
           xmlns="http://www.w3.org/2000/svg"
           class="toast__body-icon--success"
           width="44"
