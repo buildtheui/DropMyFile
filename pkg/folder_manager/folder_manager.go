@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"sort"
+	"time"
 
 	"github.com/buildtheui/DropMyFile/pkg/global"
 	"github.com/buildtheui/DropMyFile/pkg/models"
@@ -14,6 +15,12 @@ import (
 )
 
 func WatchFileChanges(folderChange chan<- []string) {
+	// time to reset the  cachedFileName value after and ilde of events
+	timeoutDuration := 3 * time.Second
+
+	// use to avoid sending several WRITE events 
+	cachedFileName := ""
+
 	// Specify the folder to watch
 	folderPath := global.TransferFolder
 
@@ -24,6 +31,21 @@ func WatchFileChanges(folderChange chan<- []string) {
     }
     defer watcher.Close()
 
+	// Create a timer to reset cachedFileName after 6 seconds
+	resetTimer := time.NewTimer(timeoutDuration)
+	defer resetTimer.Stop()
+
+	// Goroutine to handle timer reset
+	go func() {
+		for {
+			select {
+			case <-resetTimer.C:
+				// Reset cachedFileName after timeout
+				cachedFileName = ""
+			}
+		}
+	}()
+
 	 // Start listening for events.
 	 go func() {
         for {
@@ -31,9 +53,20 @@ func WatchFileChanges(folderChange chan<- []string) {
             case event, ok := <-watcher.Events:
                 if !ok {
                     return
-                }					
+                }
+				
+				if event.Name != cachedFileName {
+					// Stop the timer before modifying cachedFileName
+					resetTimer.Stop()
+
+					cachedFileName  = event.Name
 					// Notify folder changed
 					folderChange <- []string{event.Name}
+
+					// Reset the timer after handling the event
+					resetTimer.Reset(timeoutDuration)
+				}
+				
             case err, ok := <-watcher.Errors:
                 if !ok {
                     return
