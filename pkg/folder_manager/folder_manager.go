@@ -1,4 +1,4 @@
-package folderwatch
+package foldermanager
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"os"
 	"sort"
 
+	"github.com/buildtheui/DropMyFile/pkg/global"
 	"github.com/buildtheui/DropMyFile/pkg/models"
 	"github.com/buildtheui/DropMyFile/pkg/network"
 	"github.com/buildtheui/DropMyFile/pkg/utils"
@@ -14,7 +15,7 @@ import (
 
 func WatchFileChanges(folderChange chan<- []string) {
 	// Specify the folder to watch
-	folderPath := os.Getenv("TRANSFER_FOLDER")
+	folderPath := global.TransferFolder
 
 	// Create new watcher.
     watcher, err := fsnotify.NewWatcher()
@@ -55,7 +56,7 @@ func WatchFileChanges(folderChange chan<- []string) {
 
 func GetTransferFilesInfo() ([]models.FileInfo, error) {
 	// Specify the folder to watch
-	folderPath := os.Getenv("TRANSFER_FOLDER")
+	folderPath := global.TransferFolder
 
 	files, err := os.ReadDir(folderPath)
 	if err != nil {

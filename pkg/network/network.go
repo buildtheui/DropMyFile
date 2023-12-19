@@ -33,10 +33,10 @@ func getLocalIp() (string, error) {
 }
 
 func GetServerPort() string {
-	port := os.Getenv("PORT")
+	port := os.Getenv("DMF_PORT")
 
 	if (port == "") {
-		log.Fatal("PORT is not found in the environment")
+		log.Fatal("DMF_PORT is not found in the environment")
 	}
 
 	return port

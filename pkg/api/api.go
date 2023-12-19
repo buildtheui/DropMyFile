@@ -4,9 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
-	folderwatch "github.com/buildtheui/DropMyFile/pkg/folder_watch"
+	folderManager "github.com/buildtheui/DropMyFile/pkg/folder_manager"
 	"github.com/buildtheui/DropMyFile/pkg/global"
 	"github.com/buildtheui/DropMyFile/pkg/models"
 	"github.com/buildtheui/DropMyFile/pkg/utils"
@@ -56,7 +55,7 @@ func setUpApis() {
 		files := form.File["files"]
 
 		for _, file := range files {
-			err := c.SaveFile(file, fmt.Sprintf("%s/%s", os.Getenv("TRANSFER_FOLDER"), utils.RenameFileToUnique(file.Filename)))
+			err := c.SaveFile(file, fmt.Sprintf("%s/%s", global.TransferFolder, utils.RenameFileToUnique(file.Filename)))
 
 			if err != nil {
 				return err
@@ -68,8 +67,8 @@ func setUpApis() {
 
 	api.Get("/download/:file_name", func(c *fiber.Ctx) error {
 		filePathBytes := fiberUtils.CopyString(c.Params("file_name"))
-		
-		return c.Download(fmt.Sprintf("%s/%s", os.Getenv("TRANSFER_FOLDER"), filePathBytes))
+
+		return c.Download(fmt.Sprintf("%s/%s", global.TransferFolder, filePathBytes))
 	})
 }
 
@@ -106,7 +105,7 @@ func broadcastFileChanges() {
 }
 
 func getListFilesResponse() ([]byte, error) {
-	files, _ := folderwatch.GetTransferFilesInfo()
+	files, _ := folderManager.GetTransferFilesInfo()
 
 	response := models.WSResponse {
 		Event_name: models.Files_modified,
@@ -129,7 +128,7 @@ func sendMessageToClient(connection *websocket.Conn, data []byte) {
 
 func setUpWebSockets() {
 
-	go folderwatch.WatchFileChanges(broadcast)
+	go folderManager.WatchFileChanges(broadcast)
 	go broadcastFileChanges()
 
 	App.Get("/ws/files", websocket.New(func(c *websocket.Conn) {
