@@ -156,6 +156,10 @@ func RouterInit() *fiber.App {
 	// Create a new Fiber app
 	App = fiber.New(fiber.Config{
 		Views: engine,
+		// 10 TB max tranfer of data for files
+		BodyLimit: 10 * 1024 * 1024 * 1024 * 1024,
+		// Disable printing out fiber debug info
+		DisableStartupMessage: true,
 	})
 
 	// Only LAN users can access with the correct session printed in console
