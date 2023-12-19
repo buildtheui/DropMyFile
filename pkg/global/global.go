@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/buildtheui/DropMyFile/pkg/utils"
@@ -11,13 +12,35 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var GSession = utils.GenerateRandomString(6)
+var GSession = generateGlobalSession()
 var AllowPaths = []string{"/assets/"}
 var TransferFolder = getTransferFolder()
 var ExcludedFiles = []string{".DS_Store", "Thumbs.db", "desktop.ini"}
 
+func generateGlobalSession() string {
+	godotenv.Load(".env")
+
+	sessionLen := os.Getenv("DMF_SESSION_LENGTH")
+
+	if sessionLen == "" || sessionLen == "0" {
+		// If sessionLen is empty string or 0 means the global session protections was deactivated
+		// by setting DMF_SESSION_LENGTH=0 or not defining it at all
+		return ""
+	} else {
+		num, err := strconv.Atoi(sessionLen)
+		if err != nil {
+			fmt.Println("Wrong DMF_SESSION_LENGTH defaulting to 6 for session length")
+			num = 6
+		}
+
+		return utils.GenerateRandomString(num)
+	}
+}
+
 func IsvalidSession(session string) bool {
-	return GSession == session
+	// If GSession is empty string means the global session protections was deactivated
+	// by setting DMF_SESSION_LENGTH=0 therefore we return this as is a valid session
+	return GSession == "" || GSession == session
 }
 
 func ValidateSession(c *fiber.Ctx) error {
@@ -36,6 +59,7 @@ func ValidateSession(c *fiber.Ctx) error {
 	return c.Next();
 }
 
+// The precedence is Config file > ENV variable DMF_TRANSFER_FOLDER > default folder
 func getTransferFolder() string {
 	godotenv.Load(".env")
 

@@ -20,3 +20,11 @@ type WSResponse struct {
 	Event_name string `json:"eventName"`
 	Payload interface{} `json:"payload"`
 }
+
+type URL struct {
+	Scheme   string
+	Host     string
+	Port	 string
+	Path     string
+	Queries  map[string]string
+}
