@@ -28,7 +28,7 @@ document.addEventListener("alpine:init", () => {
         wsLink: filesWSLink,
       });
 
-      WSObserver.subscribe({
+      const subscriber = WSObserver.subscribe({
         next: (event, data) => {
           if (event === "files_modified") {
             console.log(data);
@@ -36,14 +36,15 @@ document.addEventListener("alpine:init", () => {
           }
         },
         // TODO: handle this error case
-        error: (err) => {
+        error: () => {
           this.toggleToast(true, {
             type: "error",
             content: "Error listening changes from files",
           });
         },
         // TODO: handle this complete case
-        complete: (err) => {
+        complete: () => {
+          subscriber.unsubscribe();
           this.toggleToast(
             true,
             {
