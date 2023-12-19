@@ -105,7 +105,7 @@
               x-text="file.size + ', ' + file.modTime"
             ></span>
           </div>
-          <button @click="file-list__download" class="file-list__download">
+          <a :href="file.downloadLink" class="file-list__download">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="30"
@@ -121,7 +121,7 @@
               <path d="M7 11l5 5l5 -5" />
               <path d="M12 4l0 12" />
             </svg>
-          </button>
+          </a>
         </li>
       </template>
     </ul>

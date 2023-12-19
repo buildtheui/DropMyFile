@@ -12,6 +12,7 @@ import (
 	"github.com/buildtheui/DropMyFile/pkg/utils"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
+	fiberUtils "github.com/gofiber/fiber/v2/utils"
 	"github.com/gofiber/template/html/v2"
 )
 
@@ -63,6 +64,12 @@ func setUpApis() {
 		}
 
 		return c.Status(fiber.StatusAccepted).JSON(fiber.Map{})
+	})
+
+	api.Get("/download/:file_name", func(c *fiber.Ctx) error {
+		filePathBytes := fiberUtils.CopyString(c.Params("file_name"))
+		
+		return c.Download(fmt.Sprintf("%s/%s", os.Getenv("TRANSFER_FOLDER"), filePathBytes))
 	})
 }
 
