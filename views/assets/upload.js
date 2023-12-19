@@ -10,7 +10,6 @@ document.addEventListener("alpine:init", () => {
     toastContent: { isOpen: false },
     filesToUpload: [],
     filesList: [],
-    progress: 0,
     session: "",
     initData(session) {
       this.listenFileChanges(session);
@@ -104,11 +103,6 @@ document.addEventListener("alpine:init", () => {
         headers: {
           "X-Requested-With": "XMLHttpRequest", // To identify AJAX request on the server
         },
-        onUploadProgress: (progressEvent) => {
-          this.progress = Math.round(
-            (progressEvent.loaded / progressEvent.total) * 100
-          );
-        },
       })
         .then((response) => {
           return response.json();
@@ -119,7 +113,7 @@ document.addEventListener("alpine:init", () => {
             content: `${this.filesToUpload.length} files were transfered succesfully!`,
           });
           this.filesToUpload = [];
-          this.progress = 0;
+          this.$refs.fileInput.value = "";
         })
         .catch((error) => {
           this.toggleToast(true, {

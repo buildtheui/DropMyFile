@@ -47,8 +47,8 @@ class WSObservable {
       throw new Error("Can not observe an open web socket");
     }
 
-    const openListener = (event) => {
-      console.log(event);
+    const openListener = (_event) => {
+      // future open listener logic
     };
 
     const messageListener = (event) => {
