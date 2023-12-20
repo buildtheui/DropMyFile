@@ -109,34 +109,29 @@ func ValidateSession(c *fiber.Ctx) error {
 }
 
 func setTransferFolder() {
-	var printFolderPath = func (folderPath string) {
-		fmt.Printf("Folder for transfering files located at: %s\n", folderPath)
-	}
 	folderFromEnv := os.Getenv("DMF_TRANSFER_FOLDER")
 
 	if folderFromEnv == "" && TransferFolder != "" {
 		// Default to CLI flag
-		printFolderPath(TransferFolder)
 		return
 	}
 
 	if folderFromEnv != "" {
 		if _, err := os.Stat(folderFromEnv); os.IsNotExist(err) {
-			fmt.Errorf("a valid DMF_TRANSFER_FOLDER is required")
+			fmt.Println("a valid DMF_TRANSFER_FOLDER is required")
 			os.Exit(1)
 		}
 		TransferFolder = folderFromEnv 
-		printFolderPath(TransferFolder)
 		return
 	}
 	
 	folder, err := makeDefaultTransferFolder()
 	if err != nil {
-		panic("Could not get the transfer files folder path")
+		fmt.Println("Could not get the transfer files folder path")
+		os.Exit(1)
 	}
 	
 	TransferFolder = folder
-	printFolderPath(folder)
 }
 
 func makeDefaultTransferFolder() (string, error) {

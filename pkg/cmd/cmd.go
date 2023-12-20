@@ -43,6 +43,9 @@ func appInit() {
 	// Init router
 	var app = api.RouterInit();
 
+	// Print instructions
+	printInstructions()
+
 	// Print QR code
 	network.PrintLanServerIpQr()
 
@@ -61,4 +64,16 @@ func Execute() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+}
+
+func printInstructions() {
+	fmt.Println("Instructions:\n", "")
+
+	fmt.Println("1.", "Ensure that you are connected to the same WiFi network or LAN to facilitate successful file transfers.")
+	fmt.Println("2.", "Use your device to scan the QR code or manually enter the provided link below for initiating file transfers or downloads.")
+	fmt.Println("3.", "The QR code will load a web app designed for seamless file transfer and downloading.")
+	fmt.Println("4.", "On the device running DropMyFile, you can move files to the Transfer Folder and the connected device on the Web app, will display the available files for download. \n", "")
+	
+	fmt.Println("Transfer Folder Location:", global.TransferFolder)
+	fmt.Println("Scan the QR code or visit", network.GetServerAddr("/"))
 }

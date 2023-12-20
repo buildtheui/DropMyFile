@@ -18,7 +18,6 @@ var myIp string
 func PrintLanServerIpQr() {
 	serverAddr := GetServerAddr("/")
 	qrterminal.Generate(serverAddr, qrterminal.L, os.Stdout)
-	fmt.Println("Or go to: " + serverAddr)
 }
 
 func getLocalIp() (string, error) {
