@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/url"
 	"os"
+	"strconv"
 
 	"github.com/buildtheui/DropMyFile/pkg/global"
 	"github.com/buildtheui/DropMyFile/pkg/models"
@@ -35,13 +36,7 @@ func getLocalIp() (string, error) {
 }
 
 func GetServerPort() string {
-	port := os.Getenv("DMF_PORT")
-
-	if (port == "") {
-		log.Fatal("DMF_PORT is not found in the environment")
-	}
-
-	return port
+	return strconv.Itoa(global.ServerPort)
 }
 
 func GetServerAddr(path string) string {

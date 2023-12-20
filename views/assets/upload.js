@@ -30,7 +30,6 @@ document.addEventListener("alpine:init", () => {
       const subscriber = WSObserver.subscribe({
         next: (event, data) => {
           if (event === "files_modified") {
-            console.log(data);
             this.filesList = data ?? [];
           }
         },

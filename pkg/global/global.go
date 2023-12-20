@@ -12,28 +12,77 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var GSession = generateGlobalSession()
+var ServerPort int
+var SessionLength int
+var GSession string
+var TransferFolder string
 var AllowPaths = []string{"/assets/"}
-var TransferFolder = getTransferFolder()
 var ExcludedFiles = []string{".DS_Store", "Thumbs.db", "desktop.ini"}
 
-func generateGlobalSession() string {
+// The precedence is ENV variables > CLI flags
+func Init() {
 	godotenv.Load(".env")
 
+	setGlobalSessionLength()
+	setGlobalSession()
+	setTransferFolder()
+	setServerPort()
+}
+
+func setGlobalSessionLength() {
 	sessionLen := os.Getenv("DMF_SESSION_LENGTH")
 
-	if sessionLen == "" || sessionLen == "0" {
-		// If sessionLen is empty string or 0 means the global session protections was deactivated
-		// by setting DMF_SESSION_LENGTH=0 or not defining it at all
-		return ""
-	} else {
-		num, err := strconv.Atoi(sessionLen)
+	if sessionLen == "" {
+		// sessionLen empty we default to the CLI flag
+		return
+	}
+	
+	if sessionLen == "0" {
+		// if 0 means the global session protections was deactivated
+		// by setting DMF_SESSION_LENGTH=0
+		SessionLength = 0
+		return
+	} 
+
+	num, err := strconv.Atoi(sessionLen)
+	if err != nil {
+		fmt.Println("Wrong DMF_SESSION_LENGTH defaulting to cli value for session length")
+		return
+	}
+
+	if num < 0 {
+		fmt.Println("DMF_SESSION_LENGTH must be greater than 0 defaulting to cli value for session length")
+		return
+	}
+
+	SessionLength = num
+}
+
+func setGlobalSession() {
+	if SessionLength == 0 {
+		GSession = ""
+		return
+	}
+
+	GSession = utils.GenerateRandomString(SessionLength)
+}
+
+func setServerPort() {
+	port := os.Getenv("DMF_PORT")
+	if port != "" {
+		num, err := strconv.Atoi(port)
 		if err != nil {
-			fmt.Println("Wrong DMF_SESSION_LENGTH defaulting to 6 for session length")
-			num = 6
+			fmt.Println("Wrong DMF_PORT defaulting to cli value for the port")
+			return
 		}
 
-		return utils.GenerateRandomString(num)
+		if num < 0 {
+			fmt.Println("DMF_PORT must be greater than 0 defaulting to cli value for the port")
+			return
+		}
+
+		ServerPort = num
+		return
 	}
 }
 
@@ -59,20 +108,26 @@ func ValidateSession(c *fiber.Ctx) error {
 	return c.Next();
 }
 
-// The precedence is Config file > ENV variable DMF_TRANSFER_FOLDER > default folder
-func getTransferFolder() string {
-	godotenv.Load(".env")
-
+func setTransferFolder() {
 	var printFolderPath = func (folderPath string) {
 		fmt.Printf("Folder for transfering files located at: %s\n", folderPath)
 	}
 	folderFromEnv := os.Getenv("DMF_TRANSFER_FOLDER")
 
-	fmt.Println(folderFromEnv)
+	if folderFromEnv == "" && TransferFolder != "" {
+		// Default to CLI flag
+		printFolderPath(TransferFolder)
+		return
+	}
 
 	if folderFromEnv != "" {
-		printFolderPath(folderFromEnv)
-		return folderFromEnv
+		if _, err := os.Stat(folderFromEnv); os.IsNotExist(err) {
+			fmt.Errorf("a valid DMF_TRANSFER_FOLDER is required")
+			os.Exit(1)
+		}
+		TransferFolder = folderFromEnv 
+		printFolderPath(TransferFolder)
+		return
 	}
 	
 	folder, err := makeDefaultTransferFolder()
@@ -80,9 +135,8 @@ func getTransferFolder() string {
 		panic("Could not get the transfer files folder path")
 	}
 	
+	TransferFolder = folder
 	printFolderPath(folder)
-
-	return folder
 }
 
 func makeDefaultTransferFolder() (string, error) {
