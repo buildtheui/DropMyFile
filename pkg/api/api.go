@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 
 	folderManager "github.com/buildtheui/DropMyFile/pkg/folder_manager"
 	"github.com/buildtheui/DropMyFile/pkg/global"
@@ -11,6 +12,7 @@ import (
 	"github.com/buildtheui/DropMyFile/pkg/utils"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	fiberUtils "github.com/gofiber/fiber/v2/utils"
 	"github.com/gofiber/template/html/v2"
 )
@@ -29,7 +31,7 @@ func setupRoutes() {
 
 	
 	App.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("index", fiber.Map{ "Session": global.GSession })
+		return c.Render("views/index", fiber.Map{ "Session": global.GSession })
 	})
 
 	App.Use("/ws", func(c *fiber.Ctx) error {
@@ -157,7 +159,7 @@ func setUpWebSockets() {
 
 func RouterInit() *fiber.App {
 	// Load templates
-	var engine = html.New("./views", ".html")
+	var engine = html.NewFileSystem(http.FS(global.ViewsContent), ".html")
 
 	// Create a new Fiber app
 	App = fiber.New(fiber.Config{
@@ -170,6 +172,14 @@ func RouterInit() *fiber.App {
 
 	// Only LAN users can access with the correct session printed in console
 	App.Use(global.ValidateSession)
+
+	// Without `PathPrefix`, you have to access it via URL:
+    // `http://<server>/assets/assets/asset_name_example.png`.
+    App.Use("/assets", filesystem.New(filesystem.Config{
+        Root: http.FS(global.ViewsContent),
+        PathPrefix: "assets",
+		Browse:     true,
+    }))
 
 	// Call setupRoutes to set up your routes
 	setupRoutes()

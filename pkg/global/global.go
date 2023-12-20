@@ -1,6 +1,7 @@
 package global
 
 import (
+	"embed"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -12,6 +13,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var ViewsContent embed.FS
 var ServerPort int
 var SessionLength int
 var GSession string
