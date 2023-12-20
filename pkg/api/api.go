@@ -176,8 +176,8 @@ func RouterInit() *fiber.App {
 	// Without `PathPrefix`, you have to access it via URL:
     // `http://<server>/assets/assets/asset_name_example.png`.
     App.Use("/assets", filesystem.New(filesystem.Config{
-        Root: http.FS(global.ViewsContent),
-        PathPrefix: "assets",
+        Root: http.FS(global.ViewsAssets),
+        PathPrefix: "views/assets",
 		Browse:     true,
     }))
 

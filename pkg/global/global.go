@@ -13,6 +13,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var ViewsAssets embed.FS
 var ViewsContent embed.FS
 var ServerPort int
 var SessionLength int
