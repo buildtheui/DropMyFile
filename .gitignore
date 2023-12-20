@@ -23,6 +23,7 @@ go.work
 
 # File folder
 files
+dist
 
 # system
 .DS_store
