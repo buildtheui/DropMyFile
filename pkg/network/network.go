@@ -5,19 +5,19 @@ import (
 	"log"
 	"net"
 	"net/url"
-	"os"
 	"strconv"
 
 	"github.com/buildtheui/DropMyFile/pkg/global"
 	"github.com/buildtheui/DropMyFile/pkg/models"
-	"github.com/mdp/qrterminal"
+	"github.com/buildtheui/DropMyFile/pkg/utils"
 )
 
 var myIp string
 
 func PrintLanServerIpQr() {
 	serverAddr := GetServerAddr("/")
-	qrterminal.Generate(serverAddr, qrterminal.L, os.Stdout)
+	qr := utils.QRNew()
+	qr.Get(serverAddr).Print()
 }
 
 func getLocalIp() (string, error) {
