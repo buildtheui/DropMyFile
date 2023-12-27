@@ -1,6 +1,6 @@
 # DropMyFile
 
-Share files from and to the device running DropMyFile using mobile or desktop devices
+Share files from and to the device running DropMyFile using mobile or desktop devices over LAN network.
 
 ## Why?
 
