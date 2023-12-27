@@ -4,7 +4,7 @@ Share files from and to the device running DropMyFile using mobile or desktop de
 
 ## Why?
 
-Ever had to send files and ended up uploading them to cloud storage like drive or using email and messaging apps like whatsapp or telegram? It can be a hassle. With DropMyFile, you can do it faster by using the same Wi-Fi connection your devices are on (LAN Network) – no need to open a bunch of apps!
+Ever had to send files and ended up uploading them to cloud storage like drive or using email and messaging apps like whatsapp or telegram? It can be a hassle. With DropMyFile, you can do it faster by using the same Wi-Fi connection your devices are on (LAN Network).
 
 ## How?
 
@@ -16,17 +16,25 @@ If your devices are on the same network, just fire up DropMyFile on your compute
 
 ## How to use it
 
-1. **Download:** Choose the appropriate file for your platform from the [releases section](https://github.com/buildtheui/DropMyFile/releases).
+1. **Download:** Choose the appropriate file for your platform from the [releases section](https://github.com/buildtheui/DropMyFile/releases), and extract the package.
 
 2. **Run the File:** Execute the downloaded file through the terminal.
 
+![Kapture 2023-12-27 at 09 27 56](https://github.com/buildtheui/DropMyFile/assets/10618020/66600f28-d7c7-41c1-92f9-ec6e44e106ed)
+
 3. **Connect Devices:** Scan the provided QR code with another device or enter the displayed link.
+
+![Screenrecorder-2023-12-27-09-43-00-394-A6vT](https://github.com/buildtheui/DropMyFile/assets/10618020/67e90698-5c34-4a85-b3b5-16572743bf45)
+
 
 4. **Upload Files:** Easily transfer files by uploading them. By default, these files will be stored in a folder named `transferedFiles` on the desktop folder.
 
+![Kapture 2023-12-27 at 10 08 23](https://github.com/buildtheui/DropMyFile/assets/10618020/a27ff98b-6f8c-467c-8f0f-70fadab14ade)
+
+
 ## Customize
 
-You can customize security, port, and the folder from enviroment variables or flags. take into account that environment variables will take prescedence from flags.
+You can customize security, port, and the folder from enviroment variables or flags. take into account that environment variables will take prescedence over flags.
 
 | Flags            | Short | Env Variable        | Default                                                      | Description                                                                                                                                                                                                |
 | ---------------- | ----- | ------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
