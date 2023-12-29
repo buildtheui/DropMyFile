@@ -12,7 +12,10 @@ import (
 	"github.com/buildtheui/DropMyFile/pkg/utils"
 )
 
-var myIp string
+var ( 
+	myIp string
+	fetchLocalIP = getLocalIp
+)
 
 func PrintLanServerIpQr() {
 	serverAddr := GetServerAddr("/")
@@ -41,7 +44,7 @@ func GetServerPort() string {
 func GetServerAddr(path string) string {
 	if myIp == "" {
 		var err error
-		myIp, err = getLocalIp()
+		myIp, err = fetchLocalIP()
 
 		if err != nil {
 			log.Fatal("LAN address could not be found")
