@@ -23,7 +23,13 @@ func GenerateRandomString(length int) string {
 
 // Split the file in basename and extension
 func SplitFile(filename string) (string, string) {
-	ext := filename[strings.LastIndex(filename, "."):]
+	var lastDotIdx int
+
+	if lastDotIdx = strings.LastIndex(filename, "."); lastDotIdx == -1 {
+		return filename, ""
+	}
+
+	ext := filename[lastDotIdx:]
 
 	return strings.TrimSuffix(filename, ext), ext
 }
